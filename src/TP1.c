@@ -10,37 +10,28 @@ int main(void)
     int kilometros = 0;
     float pAerolineas = 0;
     float pLatam = 0;
-    float precioAerolineas[4];
-    float precioLatam[4];
+    float calculoAerolinea[4];
+    float calculoLatam[4];
     float diferencia;
     int flag = 0;
     do
     {
-        printf("\n1 - Ingresar Kilometros (km = %d)\n"
-        "2 - Ingresar Precio de los Vuelos (Aerolineas = %.2f, Latam = %.2f)\n"
-        "3 - Calcular todos los costos\n"
-        "4 - Informar Resultados\n"
-        "5 - Carga forzada de datos\n"
-        "6 - Salir\n-> ", kilometros, pAerolineas, pLatam);
+        menu(kilometros, pAerolineas, pLatam);
         scanf("%d", &opcion);
         switch (opcion)
         {
         case 1:
-            printf("Ingrese los kilometros: ");
-            scanf("%d", &kilometros);
+            kilometros = getInt("Ingrese los kilometros: ");
             break;
         case 2:
-            printf("Ingrese que precio quiere ingresar (1 - Aerolineas | 2 - Latam): ");
-            scanf("%d", &opcionVuelo);
+            opcionVuelo = getInt("Ingrese que precio quiere ingresar (1 - Aerolineas | 2 - Latam): ");
             switch (opcionVuelo)
             {
             case 1:
-                printf("Ingrese el precio del vuelo en Aerolineas: ");
-                scanf("%f", &pAerolineas);
+                pAerolineas = getFloat("Ingrese el precio del vuelo en Aerolineas: ");
                 break;
             case 2:
-                printf("Ingrese el precio del vuelo en Latam: ");
-                scanf("%f", &pLatam);
+                pLatam = getFloat("Ingrese el precio del vuelo en Latam: ");
                 break;
             default:
                 printf("Opcion no valida\n");
@@ -48,20 +39,15 @@ int main(void)
             }
             break;
         case 3:
-            if (kilometros!=0 && pAerolineas!=0 && pLatam!=0)
+            if (kilometros != 0 && pAerolineas != 0 && pLatam != 0)
             {
-                precioLatam[0] = precioDebito(pLatam);
-                precioAerolineas[0] = precioDebito(pAerolineas);
-                precioLatam[1] = precioCredito(pLatam);
-                precioAerolineas[1] = precioCredito(pAerolineas);
-                precioLatam[2] = precioBitcoin(pLatam);
-                precioAerolineas[2] = precioBitcoin(pAerolineas);
-                precioLatam[3] = precioUnitario(kilometros, pLatam);
-                precioAerolineas[3] = precioUnitario(kilometros, pAerolineas);
+                calculoGeneral(kilometros, pLatam, calculoLatam);
+                calculoGeneral(kilometros, pAerolineas, calculoAerolinea);
                 diferencia = diferenciaPrecio(pLatam, pAerolineas);
                 printf("Se han calculados los costos exitosamente\n");
                 flag = 1;
-            }else
+            }
+            else
             {
                 printf("Error, ingrese los datos correctamente\n");
                 flag = 0;
@@ -70,28 +56,15 @@ int main(void)
         case 4:
             if (flag == 1)
             {
-                printf("Kilometros ingresados: %d km\n\n"
-                "Precio Latam: %.2f\n"
-                "a) Precio con tarjeta de debito: %.2f\n"
-                "b) Precio con tarjeta de credito: %.2f\n"
-                "c) Precio pagando con bitcoin : %.2f\n"
-                "d) Precio unitario: %.2f\n\n"
-                "Precio Aerolineas: %.2f\n"
-                "a) Precio con tarjeta de debito: %.2f\n"
-                "b) Precio con tarjeta de credito: %.2f\n"
-                "c) Precio pagando con bitcoin : %.2f\n"
-                "d) Precio unitario: %.2f \n\n"
-                "La diferencia de precio es: %.2f\n", kilometros, pLatam, precioLatam[0], precioLatam[1], precioLatam[2], precioLatam[3], pAerolineas, precioAerolineas[0], precioAerolineas[1], precioAerolineas[2], precioAerolineas[3], diferencia);
-            }else
+                resultados(kilometros, pLatam, calculoLatam[0], calculoLatam[1], calculoLatam[2], calculoLatam[3], pAerolineas, calculoAerolinea[0], calculoAerolinea[1], calculoAerolinea[2], calculoAerolinea[3], diferencia);
+            }
+            else
             {
-                printf("Error\n");
+                printf("Error, recuerde calcular los costos antes\n");
             }
             break;
         case 5:
-            kilometros = 7090;
-            pAerolineas = 162965;
-            pLatam = 159339;
-            printf("Los datos han sido cargados de manera forzada\n");
+            forzarDatos(&kilometros, &pAerolineas, &pLatam);
             break;
         case 6:
             break;
@@ -100,7 +73,5 @@ int main(void)
             break;
         }
     } while (opcion != 6);
-    printf("Hasta luego!\n");
-    system("PAUSE");
     return 0;
 }
